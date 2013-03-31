@@ -38,6 +38,11 @@ public class AskWindow extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
         setType(java.awt.Window.Type.UTILITY);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         AnswerField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -55,6 +60,11 @@ public class AskWindow extends javax.swing.JFrame {
         label.setText("jLabel1");
 
         FuckButton.setText("Fuck off");
+        FuckButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                FuckButtonMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -88,7 +98,7 @@ public class AskWindow extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void OKButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OKButtonMouseClicked
         this.dispose();
         engine.setAnswer(AnswerField.getText());
@@ -99,6 +109,15 @@ public class AskWindow extends javax.swing.JFrame {
            OKButtonMouseClicked(null);
        }
     }//GEN-LAST:event_AnswerFieldKeyPressed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        FuckButtonMouseClicked(null);
+    }//GEN-LAST:event_formWindowClosing
+
+    private void FuckButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FuckButtonMouseClicked
+        engine.engine.getFuckOff();
+        this.dispose();
+    }//GEN-LAST:event_FuckButtonMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField AnswerField;

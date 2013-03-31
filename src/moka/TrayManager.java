@@ -11,6 +11,7 @@ import javax.swing.*;
  */
 public class TrayManager {
     private LogicEngine engine;
+    public CheckboxMenuItem cb1;
     
     public TrayManager(LogicEngine engine){
         this.engine = engine;
@@ -30,10 +31,12 @@ public class TrayManager {
         final SystemTray tray = SystemTray.getSystemTray();
         
         // Create a popup menu components
+        MenuItem MainWindowItem = new MenuItem("Main Window");
         MenuItem addNewWordItem = new MenuItem("Add new word");
         MenuItem startNewQuizItem = new MenuItem("Start quiz");
         //MenuItem settingsItem = new MenuItem("Settings");
-        //CheckboxMenuItem cb1 = new CheckboxMenuItem("Set auto size");
+        cb1 = new CheckboxMenuItem("AutoQuestions");
+        cb1.setState(engine.irkManager.isActive());
         //CheckboxMenuItem cb2 = new CheckboxMenuItem("Set tooltip");
         //Menu displayMenu = new Menu("Display");
         //MenuItem errorItem = new MenuItem("Error");
@@ -43,13 +46,15 @@ public class TrayManager {
         MenuItem exitItem = new MenuItem("Exit");
         
         //Add components to popup menu
+        popup.add(MainWindowItem);
+        popup.addSeparator();
         popup.add(addNewWordItem);
         popup.add(startNewQuizItem);
         //popup.add(settingsItem);
         //popup.addSeparator();
-        //popup.add(cb1);
+        popup.add(cb1);
         //popup.add(cb2);
-        //popup.addSeparator();
+        popup.addSeparator();
         //popup.add(displayMenu);
         //displayMenu.add(errorItem);
         //displayMenu.add(warningItem);
@@ -73,6 +78,13 @@ public class TrayManager {
             }
         });
         
+       MainWindowItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                engine.runMainGUI();
+                tray.remove(trayIcon);
+            }
+        });
+        
         addNewWordItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 engine.addNewWord();
@@ -85,17 +97,13 @@ public class TrayManager {
             }
         });
         
-        /*cb1.addItemListener(new ItemListener() {
+        cb1.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
                 int cb1Id = e.getStateChange();
-                if (cb1Id == ItemEvent.SELECTED){
-                    trayIcon.setImageAutoSize(true);
-                } else {
-                    trayIcon.setImageAutoSize(false);
-                }
+                engine.irkManager.setActivate(cb1Id == ItemEvent.SELECTED);
             }
         });
-        
+        /*
         cb2.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
                 int cb2Id = e.getStateChange();

@@ -7,7 +7,7 @@ import java.util.Random;
  * @author EvilZerg
  */
 public class QuizManager {
-    private LogicEngine engine;
+    public LogicEngine engine;
     private Word[] data;
     private int nQuizAnswer = 5;
     private int nActiveWords = 0;

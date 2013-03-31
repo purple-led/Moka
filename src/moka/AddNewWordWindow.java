@@ -125,12 +125,12 @@ public class AddNewWordWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelButtonMouseClicked
-        //engine.setMainGUIEnable(true);
+        engine.setMainGUIEnable(true);
         this.dispose();
     }//GEN-LAST:event_cancelButtonMouseClicked
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        //engine.setMainGUIEnable(true);
+        engine.setMainGUIEnable(true);
     }//GEN-LAST:event_formWindowClosing
 
     private void addButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addButtonMouseClicked

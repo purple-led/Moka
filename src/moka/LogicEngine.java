@@ -29,12 +29,13 @@ public class LogicEngine{
     }
     
     public void run(){
-        irkManager.setActivate(false);
+    //    irkManager.setActivate(false);
         runMainGUI();
     }
     
     public void addNewWord(){
-        irkManager.setActivate(false);
+        setMainGUIEnable(false);
+    //    irkManager.setActivate(false);
         new AddNewWordWindow(this).setVisible(true);
     }
     
@@ -42,6 +43,7 @@ public class LogicEngine{
         parser.addNode(newWord);
         parser.XMLWrite();
         updateData();
+    //    irkManager.setActivate(true);
     }
     
     public void setMainGUIEnable(boolean enable){
@@ -50,16 +52,17 @@ public class LogicEngine{
     
     public void runTray(){
         tray = new TrayManager(this);
-        irkManager.setActivate(true);
+        //irkManager.setActivate(true);
     }
     
     public void runMainGUI(){
-        irkManager.setActivate(false);
-        new MainWindow(this).setVisible(true);
+       //irkManager.setActivate(false);
+       slave =  new MainWindow(this);
+       slave.setVisible(true);
     }
     
     public void startQuiz(){
-        irkManager.setActivate(false);
+    //    irkManager.setActivate(false);
         new QuizManager(this).startQuiz();
     }
     
@@ -79,6 +82,12 @@ public class LogicEngine{
     
     private void handleAnswer(int id, boolean result, boolean isE2R){
         
+    }
+    
+    public void getFuckOff()
+    {
+        tray.cb1.setState(false);
+        irkManager.setActivate(false);
     }
     
     public void closeApplication(){

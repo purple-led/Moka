@@ -9,7 +9,7 @@ import java.awt.event.*;
  */
 public class IrkManager {
     private LogicEngine engine;
-    private int delayMIN = 1;
+    private int default_delay_s = 2;
     private boolean isActive = false;
     private Timer timer = new Timer(0, null);
     private IrkManager irk = this;    
@@ -26,7 +26,7 @@ public class IrkManager {
         this.isActive = isActive;
 
         if(this.isActive && !timer.isRunning()){
-            int delay_s = delayMIN * 60;
+            int delay_s = default_delay_s;
 
             ActionListener task = new ActionListener() {
                 public void actionPerformed(ActionEvent ae) {
