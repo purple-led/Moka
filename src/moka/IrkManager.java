@@ -9,10 +9,11 @@ import java.awt.event.*;
  */
 public class IrkManager {
     private LogicEngine engine;
-    private int default_delay_s = 2;
     private boolean isActive = false;
     private Timer timer = new Timer(0, null);
-    private IrkManager irk = this;    
+    private IrkManager irk = this;
+    
+    private final int DEFAULT_DELAY_MIN = 30;
     
     public IrkManager(LogicEngine engine){
         this.engine = engine;
@@ -26,7 +27,7 @@ public class IrkManager {
         this.isActive = isActive;
 
         if(this.isActive && !timer.isRunning()){
-            int delay_s = default_delay_s;
+            int delay_s = DEFAULT_DELAY_MIN * 60;
 
             ActionListener task = new ActionListener() {
                 public void actionPerformed(ActionEvent ae) {
@@ -45,7 +46,6 @@ public class IrkManager {
     
     public void callWindow()
     {
-        System.out.println("I call window");
         engine.startTrayQuiz();
     }
 }

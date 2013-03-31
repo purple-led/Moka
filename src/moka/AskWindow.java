@@ -1,7 +1,8 @@
 package moka;
 
+import java.awt.Color;
 import java.awt.event.KeyEvent;
-import javax.swing.UIManager;
+import static moka.LogicEngine.setGUIIcon;
 
 /**
  *
@@ -14,11 +15,14 @@ public class AskWindow extends javax.swing.JFrame {
         this.engine = engine;
         initComponents();
         
-        this.setTitle(title);
+        setTitle(title);
+        MainPanel.setBackground(new Color(255, 255, 255));
         label.setText(msg);
-        this.FuckButton.setVisible(isFuckVisible);
-        this.pack();
-        this.setLocationRelativeTo(null);
+        FuckButton.setVisible(isFuckVisible);
+        setGUIIcon(this);
+        
+        pack();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -30,9 +34,10 @@ public class AskWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        MainPanel = new javax.swing.JPanel();
+        label = new javax.swing.JLabel();
         AnswerField = new javax.swing.JTextField();
         OKButton = new javax.swing.JButton();
-        label = new javax.swing.JLabel();
         FuckButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -44,6 +49,13 @@ public class AskWindow extends javax.swing.JFrame {
             }
         });
 
+        label.setText("jLabel1");
+
+        AnswerField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AnswerFieldActionPerformed(evt);
+            }
+        });
         AnswerField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 AnswerFieldKeyPressed(evt);
@@ -57,8 +69,6 @@ public class AskWindow extends javax.swing.JFrame {
             }
         });
 
-        label.setText("jLabel1");
-
         FuckButton.setText("Fuck off");
         FuckButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -66,33 +76,47 @@ public class AskWindow extends javax.swing.JFrame {
             }
         });
 
+        javax.swing.GroupLayout MainPanelLayout = new javax.swing.GroupLayout(MainPanel);
+        MainPanel.setLayout(MainPanelLayout);
+        MainPanelLayout.setHorizontalGroup(
+            MainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(MainPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(MainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(label, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(MainPanelLayout.createSequentialGroup()
+                        .addGroup(MainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(AnswerField, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(MainPanelLayout.createSequentialGroup()
+                                .addComponent(OKButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(FuckButton)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        MainPanelLayout.setVerticalGroup(
+            MainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(MainPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(label)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(AnswerField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(MainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(OKButton)
+                    .addComponent(FuckButton))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(OKButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(FuckButton))
-                    .addComponent(AnswerField, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(label))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(MainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(label)
-                .addGap(9, 9, 9)
-                .addComponent(AnswerField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(OKButton)
-                    .addComponent(FuckButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(MainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -111,17 +135,22 @@ public class AskWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_AnswerFieldKeyPressed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        FuckButtonMouseClicked(null);
+        engine.handleFuckOff();
+        this.dispose();
     }//GEN-LAST:event_formWindowClosing
 
     private void FuckButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FuckButtonMouseClicked
-        engine.engine.getFuckOff();
-        this.dispose();
+        formWindowClosing(null);
     }//GEN-LAST:event_FuckButtonMouseClicked
+
+    private void AnswerFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnswerFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_AnswerFieldActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField AnswerField;
     private javax.swing.JButton FuckButton;
+    private javax.swing.JPanel MainPanel;
     private javax.swing.JButton OKButton;
     private javax.swing.JLabel label;
     // End of variables declaration//GEN-END:variables

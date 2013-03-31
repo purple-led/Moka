@@ -2,8 +2,8 @@ package moka;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.net.URL;
 import javax.swing.*;
+import static moka.LogicEngine.createImage;
 
 /**
  *
@@ -11,7 +11,7 @@ import javax.swing.*;
  */
 public class TrayManager {
     private LogicEngine engine;
-    public CheckboxMenuItem cb1;
+    private CheckboxMenuItem CheckBoxTrayQuiz;
     
     public TrayManager(LogicEngine engine){
         this.engine = engine;
@@ -22,45 +22,60 @@ public class TrayManager {
         }
     }
     
+    public void setCheckBoxTrayQuiz(boolean isActive){
+        CheckBoxTrayQuiz.setState(isActive);   
+    }
+    
     private void createAndShowGUI(){
         final PopupMenu popup = new PopupMenu();
-        final TrayIcon trayIcon =
-               new TrayIcon(createImage("moka_logo_16.png", "tray icon"));
-        //trayIcon.setImageAutoSize(true);
-        
+
         final SystemTray tray = SystemTray.getSystemTray();
+        double height_icon = tray.getTrayIconSize().getHeight();
+        
+        String path_icon;
+        if(height_icon == 24) path_icon = "moka_logo_24.png";
+        else if(height_icon == 16) path_icon = "moka_logo_16.png";
+        else path_icon = "moka_logo.png";
+        
+        final TrayIcon trayIcon = new TrayIcon(createImage(path_icon));
+        trayIcon.setImageAutoSize(true);
         
         // Create a popup menu components
-        MenuItem MainWindowItem = new MenuItem("Main Window");
-        MenuItem addNewWordItem = new MenuItem("Add new word");
+        MenuItem MainWindowItem = new MenuItem("Main window");
         MenuItem startNewQuizItem = new MenuItem("Start quiz");
-        //MenuItem settingsItem = new MenuItem("Settings");
-        cb1 = new CheckboxMenuItem("AutoQuestions");
-        cb1.setState(engine.irkManager.isActive());
-        //CheckboxMenuItem cb2 = new CheckboxMenuItem("Set tooltip");
-        //Menu displayMenu = new Menu("Display");
-        //MenuItem errorItem = new MenuItem("Error");
-        //MenuItem warningItem = new MenuItem("Warning");
-        //MenuItem infoItem = new MenuItem("Info");
-        //MenuItem noneItem = new MenuItem("None");
+        MenuItem addNewWordItem = new MenuItem("Add new word");
+        CheckBoxTrayQuiz = new CheckboxMenuItem("Auto question");
+        CheckBoxTrayQuiz.setState(engine.irkManager.isActive());
         MenuItem exitItem = new MenuItem("Exit");
+        
+        /*MenuItem settingsItem = new MenuItem("Settings");
+        CheckboxMenuItem cb2 = new CheckboxMenuItem("Set tooltip");
+        Menu displayMenu = new Menu("Display");
+        MenuItem errorItem = new MenuItem("Error");
+        MenuItem warningItem = new MenuItem("Warning");
+        MenuItem infoItem = new MenuItem("Info");
+        MenuItem noneItem = new MenuItem("None");
+        */
         
         //Add components to popup menu
         popup.add(MainWindowItem);
         popup.addSeparator();
         popup.add(addNewWordItem);
         popup.add(startNewQuizItem);
-        //popup.add(settingsItem);
-        //popup.addSeparator();
-        popup.add(cb1);
-        //popup.add(cb2);
+        popup.add(CheckBoxTrayQuiz);
         popup.addSeparator();
-        //popup.add(displayMenu);
-        //displayMenu.add(errorItem);
-        //displayMenu.add(warningItem);
-        //displayMenu.add(infoItem);
-        //displayMenu.add(noneItem);
         popup.add(exitItem);
+  
+        /*
+        popup.add(settingsItem);
+        popup.addSeparator();
+        popup.add(cb2);
+        popup.add(displayMenu);
+        displayMenu.add(errorItem);
+        displayMenu.add(warningItem);
+        displayMenu.add(infoItem);
+        displayMenu.add(noneItem);
+        */
         
         trayIcon.setPopupMenu(popup);
         
@@ -84,25 +99,33 @@ public class TrayManager {
                 tray.remove(trayIcon);
             }
         });
-        
+       
+        startNewQuizItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                engine.startQuiz();
+            }
+        });
+       
         addNewWordItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 engine.addNewWord();
             }
         });
         
-        startNewQuizItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                engine.startQuiz();
+        CheckBoxTrayQuiz.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+                int cb1Id = e.getStateChange();
+                engine.activateTrayQuiz(cb1Id == ItemEvent.SELECTED);
             }
         });
         
-        cb1.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent e) {
-                int cb1Id = e.getStateChange();
-                engine.irkManager.setActivate(cb1Id == ItemEvent.SELECTED);
+        exitItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                tray.remove(trayIcon);
+                engine.closeApplication();
             }
         });
+        
         /*
         cb2.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
@@ -148,24 +171,5 @@ public class TrayManager {
         infoItem.addActionListener(listener);
         noneItem.addActionListener(listener);
         */
-        
-        exitItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                tray.remove(trayIcon);
-                engine.closeApplication();
-            }
-        });
-    }
-    
-    //Obtain the image URL
-    protected static Image createImage(String path, String description) {
-        URL imageURL = TrayManager.class.getResource(path);
-
-        if (imageURL == null) {
-            System.err.println("Resource not found: " + path);
-            return null;
-        } else {
-            return (new ImageIcon(imageURL, description)).getImage();
-        }
-    }        
+    }      
 }

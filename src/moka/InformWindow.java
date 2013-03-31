@@ -1,5 +1,8 @@
 package moka;
 
+import java.awt.Color;
+import static moka.LogicEngine.setGUIIcon;
+
 /**
  *
  * @author EvilZerg
@@ -11,9 +14,13 @@ public class InformWindow extends javax.swing.JFrame {
      */
     public InformWindow(String title, String msg, String msg_button) {
         initComponents();
+        
+        MainPanel.setBackground(new Color(255, 255, 255));
         this.setTitle(title);
         this.Label.setText(msg);
         this.Button.setText(msg_button);
+        setGUIIcon(this);
+        
         this.pack();
         this.setLocationRelativeTo(null);
     }
@@ -27,6 +34,7 @@ public class InformWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        MainPanel = new javax.swing.JPanel();
         Label = new javax.swing.JLabel();
         Button = new javax.swing.JToggleButton();
 
@@ -35,6 +43,7 @@ public class InformWindow extends javax.swing.JFrame {
         setType(java.awt.Window.Type.UTILITY);
 
         Label.setText("jLabel1");
+        Label.setMaximumSize(new java.awt.Dimension(155, 15));
 
         Button.setText("jToggleButton1");
         Button.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -43,25 +52,36 @@ public class InformWindow extends javax.swing.JFrame {
             }
         });
 
+        javax.swing.GroupLayout MainPanelLayout = new javax.swing.GroupLayout(MainPanel);
+        MainPanel.setLayout(MainPanelLayout);
+        MainPanelLayout.setHorizontalGroup(
+            MainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(MainPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Button)
+                .addContainerGap())
+        );
+        MainPanelLayout.setVerticalGroup(
+            MainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(MainPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(MainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Label, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Button))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(Label)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(Button)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(MainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Label)
-                    .addComponent(Button))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(MainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -75,5 +95,6 @@ public class InformWindow extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton Button;
     private javax.swing.JLabel Label;
+    private javax.swing.JPanel MainPanel;
     // End of variables declaration//GEN-END:variables
 }

@@ -9,7 +9,6 @@ import java.util.Random;
 public class QuizManager {
     public LogicEngine engine;
     private Word[] data;
-    private int nQuizAnswer = 5;
     private int nActiveWords = 0;
     private Random randomGenerator = new Random();
     private int usedWords[];
@@ -17,9 +16,10 @@ public class QuizManager {
     private boolean isE2R[];
     private boolean isQuiz;
     private int iStep = -1;
-
-    private String NO_WORDS_TITLE = "No words";
-    private String NO_WORDS_MSG = "I can't teach you without any words. So, add new words to the dictionary.";
+    
+    private final int N_QUIZ_ANSWER = 5;
+    private final String NO_WORDS_TITLE = "No words";
+    private final String NO_WORDS_MSG = "I can't teach you without any words. So, add new words to the dictionary.";
     
     public QuizManager(LogicEngine engine){
         this.engine = engine;
@@ -40,11 +40,16 @@ public class QuizManager {
         startTest();   
     }
     
-    public void startTest(){
-        if(nActiveWords == 0) {new InformWindow(NO_WORDS_TITLE, NO_WORDS_MSG, "OK").setVisible(true); return;}
+    private void startTest(){
+        if(nActiveWords == 0){
+            new InformWindow(NO_WORDS_TITLE, NO_WORDS_MSG, "OK").setVisible(true);
+            engine.noWordsQuiz();
+         
+            return;
+        }
         
         int nAnswer = 1;
-        if (isQuiz) nAnswer = nQuizAnswer;
+        if (isQuiz) nAnswer = N_QUIZ_ANSWER;
         
         if (iStep < 0){
             usedWords = new int[nAnswer];
@@ -84,14 +89,18 @@ public class QuizManager {
         iStep--;
         int carr = usedWords[iStep];
         if (isE2R[iStep]){
-            if (answer.equals(data[carr].russian)) quizResults[iStep] = true;
+            if (answer.trim().toLowerCase().equals(data[carr].russian.trim().toLowerCase())) quizResults[iStep] = true;
             else quizResults[iStep] = false;
         } else {
-            if (answer.equals(data[carr].english)) quizResults[iStep] = true;
+            if (answer.trim().toLowerCase().equals(data[carr].english.trim().toLowerCase())) quizResults[iStep] = true;
             else quizResults[iStep] = false;
         }
         iStep++;
         startTest();
+    }
+    
+    public void handleFuckOff(){
+        if(!isQuiz) engine.activateTrayQuiz(false);
     }
     
     private boolean isIncluded(int array[], int elem){
@@ -103,7 +112,7 @@ public class QuizManager {
     private int getNumberOfQuestionsInQuiz(){
         int res = 0;
         int nAnswer = 1;
-        if (isQuiz) nAnswer = nQuizAnswer;
+        if (isQuiz) nAnswer = N_QUIZ_ANSWER;
         
         for(int i=0; i<nAnswer; i++)
              if (usedWords[i]!=-1)
@@ -112,12 +121,14 @@ public class QuizManager {
     }
     
     private void askQuestion(int i, boolean isE2R){
+        String title;
         String word;
         String question;
 
+        if(isQuiz) title = "Quiz"; else title = "Auto question";
         if(isE2R) word = data[i].english; else word = data[i].russian;
         question = "Hey man! What does " + word + " mean?";
-
-        new AskWindow(this, word, question, !isQuiz).setVisible(true);
+        
+        new AskWindow(this, title, question, !isQuiz).setVisible(true);
     }
 }

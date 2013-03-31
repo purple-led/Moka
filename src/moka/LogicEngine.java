@@ -1,5 +1,9 @@
 package moka;
 
+import java.awt.Image;
+import java.net.URL;
+import javax.swing.*;
+
 /**
  *
  * @author EvilZerg
@@ -29,13 +33,11 @@ public class LogicEngine{
     }
     
     public void run(){
-    //    irkManager.setActivate(false);
         runMainGUI();
     }
     
     public void addNewWord(){
         setMainGUIEnable(false);
-    //    irkManager.setActivate(false);
         new AddNewWordWindow(this).setVisible(true);
     }
     
@@ -43,7 +45,6 @@ public class LogicEngine{
         parser.addNode(newWord);
         parser.XMLWrite();
         updateData();
-    //    irkManager.setActivate(true);
     }
     
     public void setMainGUIEnable(boolean enable){
@@ -52,42 +53,73 @@ public class LogicEngine{
     
     public void runTray(){
         tray = new TrayManager(this);
-        //irkManager.setActivate(true);
     }
     
     public void runMainGUI(){
-       //irkManager.setActivate(false);
        slave =  new MainWindow(this);
        slave.setVisible(true);
     }
     
+    protected static void setGUIIcon(JFrame frame){
+        frame.setIconImage(createImage("moka_logo.png"));
+    }
+    
+    //Obtain the image URL
+    protected static Image createImage(String path) {
+        URL imageURL = TrayManager.class.getResource(path);
+
+        if (imageURL == null) {
+            System.err.println("Resource not found: " + path);
+            return null;
+        } else {
+            return (new ImageIcon(imageURL)).getImage();
+        }
+    }  
+    
     public void startQuiz(){
-    //    irkManager.setActivate(false);
         new QuizManager(this).startQuiz();
     }
     
+    public void noWordsQuiz(){
+        activateTrayQuiz(false);
+    }
+    
+    /*
+     * Tray Quiz
+     */
     public void startTrayQuiz(){
-        irkManager.setActivate(false);
         new QuizManager(this).startTrayQuiz();
     }
     
+    public void activateTrayQuiz(boolean isActive){
+        tray.setCheckBoxTrayQuiz(isActive);
+        irkManager.setActivate(isActive);      
+    }
+    
+    public void updateTrayQuiz(){
+        activateTrayQuiz(irkManager.isActive());
+    }
+    
+    public boolean isActiveTrayQuiz(){
+        return irkManager.isActive();
+    }
+    
+    /*
+     * Handle Quetions
+     */
+    
     public void handleResultsOfQuiz(int word[], boolean results[], boolean isE2R[], boolean isQuiz){
         int len = word.length;
+        
         System.out.println("---");
         for(int i=0; i < len; i++)
             System.out.println(word[i] + " " + results[i] + " " + isE2R[i]);
         
-        if(!isQuiz) irkManager.setActivate(true);
+        if(!isQuiz) updateTrayQuiz();
     }
     
     private void handleAnswer(int id, boolean result, boolean isE2R){
-        
-    }
-    
-    public void getFuckOff()
-    {
-        tray.cb1.setState(false);
-        irkManager.setActivate(false);
+        //
     }
     
     public void closeApplication(){
