@@ -3,13 +3,15 @@ package moka;
 import java.awt.Color;
 import javax.swing.UIManager;
 import javax.swing.UIManager.*;
-
+import javax.swing.ImageIcon;
+        
 /**
  *
  * @author EvilZerg
  */
 public class MainWindow extends javax.swing.JFrame {
     public LogicEngine engine;
+    private boolean isAchShowed;
     
     public MainWindow(LogicEngine engine){
         this.engine = engine;
@@ -22,9 +24,36 @@ public class MainWindow extends javax.swing.JFrame {
             }
         } catch (Exception e) {}
 
+        //adding status bar
+        statusBar = new StatusBar();
+        getContentPane().add(statusBar, java.awt.BorderLayout.SOUTH);
+        
         initComponents();
         MainPanel.setBackground(new Color(255, 255, 255));
+        MenuPanel.setBackground(new Color(255, 255, 255));
+        AchievementsPanel.setBackground(new Color(255, 255, 255));
         engine.setGUIIcon(this);
+        
+        showAchivements();
+        isAchShowed = true;
+        
+        //this.pack();
+    }
+    
+    public void showAchivements(){
+        ImageIcon imageIcon = new ImageIcon("lock.png");
+        achLabel = new javax.swing.JLabel[12];
+        for(int i=0; i<12; i++){
+            achLabel[i] = new javax.swing.JLabel(imageIcon);
+            achLabel[i].setLocation((i%3)*96, (i/3)*96);
+            achLabel[i].setSize(96,96);
+            AchievementsPanel.add(achLabel[i]);
+        }    
+    }
+    
+    public void hideAchivements(){
+        for(int i=0; i<12; i++)
+            achLabel[i].setVisible(false);
     }
     
     /**
@@ -37,10 +66,15 @@ public class MainWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         MainPanel = new javax.swing.JPanel();
+        MenuPanel = new javax.swing.JPanel();
         QuizButton = new javax.swing.JButton();
         AddNewWordButton = new javax.swing.JButton();
         InTrayButton = new javax.swing.JButton();
         ExitButton = new javax.swing.JButton();
+        DictionaryButton = new javax.swing.JButton();
+        SettingsButton = new javax.swing.JButton();
+        AchievementsButton = new javax.swing.JToggleButton();
+        AchievementsPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Moka");
@@ -84,22 +118,41 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout MainPanelLayout = new javax.swing.GroupLayout(MainPanel);
-        MainPanel.setLayout(MainPanelLayout);
-        MainPanelLayout.setHorizontalGroup(
-            MainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(MainPanelLayout.createSequentialGroup()
+        DictionaryButton.setText("Dictionary");
+        DictionaryButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                DictionaryButtonMouseClicked(evt);
+            }
+        });
+
+        SettingsButton.setText("Settings");
+
+        AchievementsButton.setText("Achievements");
+        AchievementsButton.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                AchievementsButtonStateChanged(evt);
+            }
+        });
+
+        javax.swing.GroupLayout MenuPanelLayout = new javax.swing.GroupLayout(MenuPanel);
+        MenuPanel.setLayout(MenuPanelLayout);
+        MenuPanelLayout.setHorizontalGroup(
+            MenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(MenuPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(MainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(MenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(DictionaryButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(QuizButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(AddNewWordButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(AddNewWordButton, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
                     .addComponent(InTrayButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(ExitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(ExitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(SettingsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(AchievementsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
-        MainPanelLayout.setVerticalGroup(
-            MainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(MainPanelLayout.createSequentialGroup()
+        MenuPanelLayout.setVerticalGroup(
+            MenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(MenuPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(QuizButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -107,19 +160,53 @@ public class MainWindow extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(InTrayButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(DictionaryButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(AchievementsButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(SettingsButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ExitButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(164, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout AchievementsPanelLayout = new javax.swing.GroupLayout(AchievementsPanel);
+        AchievementsPanel.setLayout(AchievementsPanelLayout);
+        AchievementsPanelLayout.setHorizontalGroup(
+            AchievementsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 286, Short.MAX_VALUE)
+        );
+        AchievementsPanelLayout.setVerticalGroup(
+            AchievementsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout MainPanelLayout = new javax.swing.GroupLayout(MainPanel);
+        MainPanel.setLayout(MainPanelLayout);
+        MainPanelLayout.setHorizontalGroup(
+            MainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MainPanelLayout.createSequentialGroup()
+                .addComponent(AchievementsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(MenuPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        MainPanelLayout.setVerticalGroup(
+            MainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(MenuPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(AchievementsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(MainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(MainPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(MainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(MainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
 
         pack();
@@ -151,11 +238,33 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_QuizButtonActionPerformed
 
+    private void DictionaryButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DictionaryButtonMouseClicked
+        engine.showDictionary();
+    }//GEN-LAST:event_DictionaryButtonMouseClicked
+
+    private void AchievementsButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_AchievementsButtonStateChanged
+/*        if (isAchShowed){
+            isAchShowed = false;
+            hideAchivements();
+        } else {
+            isAchShowed = true;
+            showAchivements();
+        }  */      
+    }//GEN-LAST:event_AchievementsButtonStateChanged
+
+    //private Container pane;
+    private javax.swing.JLabel achLabel[];
+    private StatusBar statusBar;
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JToggleButton AchievementsButton;
+    private javax.swing.JPanel AchievementsPanel;
     private javax.swing.JButton AddNewWordButton;
+    private javax.swing.JButton DictionaryButton;
     private javax.swing.JButton ExitButton;
     private javax.swing.JButton InTrayButton;
     private javax.swing.JPanel MainPanel;
+    private javax.swing.JPanel MenuPanel;
     private javax.swing.JButton QuizButton;
+    private javax.swing.JButton SettingsButton;
     // End of variables declaration//GEN-END:variables
 }

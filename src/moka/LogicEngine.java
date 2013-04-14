@@ -10,26 +10,20 @@ import javax.swing.*;
  */
 public class LogicEngine{
     public DataParser parser;
-    public Journal journal;
     public IrkManager irkManager;
     public Word[] data;
     private MainWindow slave;
     private TrayManager tray;
-    
+    public JournalManager journal;
+    public AchievementManager achivements;
+    public SettingsManager settings;
+            
     public LogicEngine(){
-        parser = new DataParser();
-        journal = new Journal();
+        parser = new DataParser(this);
+        settings = new SettingsManager(this);
+        journal = new JournalManager(this);
         irkManager = new IrkManager(this);
-
-        data = parser.getData();
-    }
-    
-    public void updateData(){
-        data = parser.getData();
-    }
-    
-    public Word[] getData(){
-        return data;
+        achivements = new AchievementManager(this, journal);
     }
     
     public void run(){
@@ -41,14 +35,21 @@ public class LogicEngine{
         new AddNewWordWindow(this).setVisible(true);
     }
     
+    public void showDictionary(){
+        setMainGUIEnable(false);
+        new DictionaryWindow(this);
+    }
+    
     public void addNewWord(Word newWord){
         parser.addNode(newWord);
-        parser.XMLWrite();
-        updateData();
     }
     
     public void setMainGUIEnable(boolean enable){
         slave.setEnabled(enable);
+        if (enable){
+            slave.toFront(); 
+            slave.requestFocus();
+        }
     }
     
     public void runTray(){
@@ -109,17 +110,72 @@ public class LogicEngine{
      */
     
     public void handleResultsOfQuiz(int word[], boolean results[], boolean isE2R[], boolean isQuiz){
-        int len = word.length;
+        int len = 0;
+        int countTrueAnswers = 0;
+
+        while (word[len]!=-1) len++;
+        for(int i = 0; i < len; i ++) if(results[i]) countTrueAnswers ++;
         
-        System.out.println("---");
-        for(int i=0; i < len; i++)
-            System.out.println(word[i] + " " + results[i] + " " + isE2R[i]);
+        // Update the dictionary data
+        for(int i=0; i<len; i++){
+            if (results[i]){
+               if (isE2R[i]) data[word[i]].value_e2r++;
+               else          data[word[i]].value_r2e++;
+               
+               if ((data[word[i]].value_e2r * data[word[i]].value_r2e) == 4)
+                   data[word[i]].isActive = false;
+            } else {
+               if (isE2R[i]) data[word[i]].value_e2r = 0;
+               else          data[word[i]].value_r2e = 0;
+            }
+            parser.changeNode(data[word[i]], data[word[i]]);
+        }
+        
+        // Adding new event in journal
+        if (isQuiz)
+            for(int i=0; i<len; i++){
+                journal.addNewEvent("quiz", word[i], isE2R[i], results[i]);
+            }
+        else journal.addNewEvent("trayquiz", word[0], isE2R[0], results[0]);
+        
+        // Create content for windows with results
+        String resMessage = "<html><table border = \"0\">";
+        String opinionMessage = "";
+
+        for(int i=0; i<len; i++){
+            resMessage += "<tr><td>";
+
+            if ((results[i])&&(isE2R[i]))  resMessage += "<font color=green>";
+            else
+            if ((!results[i])&&(isE2R[i])) resMessage += "<font color=red>";
+            else                           resMessage += "<font>";
+           
+            resMessage += data[word[i]].russian;
+            resMessage += "</font></td><td>";
+            
+            if ((results[i])&&(!isE2R[i]))  resMessage += "<font color=green>";
+            else
+            if ((!results[i])&&(!isE2R[i])) resMessage += "<font color=red>";
+            else                           resMessage += "<font>";
+            
+            resMessage += data[word[i]].english;
+            resMessage += "</font></td></tr>";
+        }
+        resMessage += "</table></html>";
+        
+        if(countTrueAnswers == len) opinionMessage = "Nice job!";
+        else if(countTrueAnswers == 0) opinionMessage = "You need to study harder!";
+        else if(countTrueAnswers == len - 1) opinionMessage = "You could be better!";
+        else opinionMessage = "You got me, guy!";   
+        
+        setMainGUIEnable(false);
+        new ResultsWindow(this, "Results", resMessage, opinionMessage);
         
         if(!isQuiz) updateTrayQuiz();
     }
     
-    private void handleAnswer(int id, boolean result, boolean isE2R){
-        //
+    public void clearWords(){
+        parser.clearData();
     }
     
     public void closeApplication(){

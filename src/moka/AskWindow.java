@@ -49,7 +49,7 @@ public class AskWindow extends javax.swing.JFrame {
             }
         });
 
-        label.setText("jLabel1");
+        label.setText("Answer");
 
         AnswerField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -140,6 +140,7 @@ public class AskWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void FuckButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FuckButtonMouseClicked
+        engine.gtfo();
         formWindowClosing(null);
     }//GEN-LAST:event_FuckButtonMouseClicked
 

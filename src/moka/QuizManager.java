@@ -23,7 +23,7 @@ public class QuizManager {
     
     public QuizManager(LogicEngine engine){
         this.engine = engine;
-        data = engine.getData();
+        data = engine.data;
         
         for(int i=0; i < data.length; i++){
             if(data[i].isActive) nActiveWords ++;
@@ -75,8 +75,8 @@ public class QuizManager {
                 int i = iStep;
                 int carr = usedWords[i];
                 
-                if (data[carr].value_e2r==2) isE2R[iStep++] = true;
-                else if (data[carr].value_r2e==2) isE2R[iStep++] = false;
+                if (data[carr].value_e2r==2) isE2R[iStep] = false;
+                else if (data[carr].value_r2e==2) isE2R[iStep] = true;
                 else isE2R[iStep] = (randomGenerator.nextInt(2)==0);
                 askQuestion(carr, isE2R[iStep++]);
         } else {
@@ -103,6 +103,10 @@ public class QuizManager {
         if(!isQuiz) engine.activateTrayQuiz(false);
     }
     
+    public void gtfo(){
+        engine.journal.addNewEvent("gtfo", usedWords[iStep], isE2R[iStep]);
+    }
+    
     private boolean isIncluded(int array[], int elem){
         for(int i=0; i<array.length; i++)
             if (array[i]==elem) return true;
@@ -127,7 +131,7 @@ public class QuizManager {
 
         if(isQuiz) title = "Quiz"; else title = "Auto question";
         if(isE2R) word = data[i].english; else word = data[i].russian;
-        question = "Hey man! What does " + word + " mean?";
+        question = "<html><body>Hey man! What does <b>" + word + "</b> mean?</body></html>";
         
         new AskWindow(this, title, question, !isQuiz).setVisible(true);
     }

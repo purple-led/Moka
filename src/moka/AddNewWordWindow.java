@@ -15,6 +15,7 @@ public class AddNewWordWindow extends javax.swing.JFrame {
     public AddNewWordWindow(LogicEngine engine) {
         this.engine = engine;
         initComponents();
+        
         MainPanel.setBackground(new Color(255, 255, 255));
         setGUIIcon(this);
     }

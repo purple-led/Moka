@@ -33,6 +33,8 @@ public class TrayManager {
         double height_icon = tray.getTrayIconSize().getHeight();
         
         String path_icon;
+        
+        System.out.println(height_icon);
         if(height_icon == 24) path_icon = "moka_logo_24.png";
         else if(height_icon == 16) path_icon = "moka_logo_16.png";
         else path_icon = "moka_logo.png";
